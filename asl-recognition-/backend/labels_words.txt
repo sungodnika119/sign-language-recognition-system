@@ -1,0 +1,8 @@
+no
+apple
+cat
+dog
+goat
+hat
+map
+thankyou

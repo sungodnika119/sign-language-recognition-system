@@ -10,6 +10,9 @@ venv/
 backend/venv/
 env/
 .venv/
+**/venv/
+**/venv*/
+**/.venv/
 
 # Python packaging / test artifacts
 .pytest_cache/
@@ -22,10 +25,25 @@ build/
 dist/
 *.egg-info/
 
+# Local datasets / generated ML artifacts
+**/.matplotlib/
+**/data/kaggle/
+**/data/raw/
+**/data/processed/
+**/models/
+**/*.h5
+**/*.keras
+**/*.pkl
+**/*.joblib
+**/*.tflite
+
 # Frontend
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
+**/node_modules/
+**/dist/
+**/.vite/
 
 # Environment files
 .env
@@ -34,8 +52,10 @@ frontend/.vite/
 
 # OS / editor files
 .DS_Store
+**/.DS_Store
 Thumbs.db
 *.log
+**/*.log
 .idea/
 .vscode/
-
+**/.git.backup/
