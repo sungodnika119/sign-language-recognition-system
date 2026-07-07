@@ -53,6 +53,7 @@ Run the backend first, then the frontend.
 On macOS or Linux:
 
 ```bash
+cd asl-recogonition-
 cd backend
 python3 -m venv venv
 source venv/bin/activate
@@ -81,6 +82,7 @@ http://localhost:8000/api/health
 ### Frontend
 
 ```bash
+cd asl-recognition-
 cd frontend
 npm install
 npm run dev

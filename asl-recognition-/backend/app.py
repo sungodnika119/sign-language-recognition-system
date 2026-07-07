@@ -70,7 +70,11 @@ def load_assets():
     sync_word_labels_from_data()
     refresh_training_words_cache()
     hand_landmarker = create_hand_detector(HAND_LANDMARKER_PATH, max_num_hands=2)
-    face_landmarker = create_face_detector(FACE_LANDMARKER_PATH, max_num_faces=1)
+    try:
+        face_landmarker = create_face_detector(FACE_LANDMARKER_PATH, max_num_faces=1)
+    except Exception as exc:
+        app.logger.warning("Face landmarker unavailable; continuing without face overlay: %s", exc)
+        face_landmarker = None
 
 
 def decode_image(image_data: str):
@@ -516,7 +520,7 @@ def api_training_reload_word_model():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    if model is None or label_encoder is None or hand_landmarker is None or face_landmarker is None:
+    if model is None or label_encoder is None or hand_landmarker is None:
         return jsonify(
             {
                 "success": False,
@@ -541,7 +545,7 @@ def predict():
 
         with hand_lock:
             results = hand_landmarker.detect(mp_image)
-            face_results = face_landmarker.detect(mp_image)
+            face_results = face_landmarker.detect(mp_image) if face_landmarker is not None else None
 
         if not results.hand_landmarks:
             hand_data = []
@@ -577,7 +581,7 @@ def predict():
             label = decode_label(predicted_index)
             top_predictions = format_top_letter_predictions(prediction)
 
-        face_detected = bool(face_results.face_landmarks)
+        face_detected = bool(face_results and face_results.face_landmarks)
         face_landmarks = format_face_landmarks(face_results) if face_detected else []
         face_expression = detect_face_expression(face_results) if face_detected else ""
         stable_status = "Stable" if confidence >= 90 else "Unstable"
